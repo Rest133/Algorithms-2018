@@ -263,9 +263,19 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      */
     @NotNull
     @Override
-    public SortedSet<T> subSet(T fromElement, T toElement) {
-        // TODO
-        throw new NotImplementedError();
+    public SortedSet<T> subSet(T fromElement, T toElement) throws IllegalArgumentException, NullPointerException {
+
+        SortedSet<T> newSet = new BinaryTree<>();
+        BinaryTreeIterator treeIterator = new BinaryTreeIterator();
+
+        while (treeIterator.hasNext()) {
+            if (treeIterator.next().compareTo(fromElement) > 0 && treeIterator.next().compareTo(toElement) < 0)
+                newSet.add(treeIterator.current.value);
+            System.out.println("From Element " + fromElement.toString() + " to Element" + toElement.toString());
+            System.out.println("newSet.add(" + treeIterator.current.value +") ");
+        }
+
+        return newSet;
     }
 
     /**
@@ -274,9 +284,21 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      */
     @NotNull
     @Override
-    public SortedSet<T> headSet(T toElement) {
-        // TODO
-        throw new NotImplementedError();
+    public SortedSet<T> headSet(T toElement)throws IllegalArgumentException, NullPointerException  {
+        SortedSet<T> newSet = new BinaryTree<>();
+        BinaryTreeIterator treeIterator = new BinaryTreeIterator();
+
+        while (treeIterator.hasNext()) {
+            if ( treeIterator.next().compareTo(toElement) < 0)
+                newSet.add(treeIterator.current.value);
+            System.out.println("To Element" + toElement.toString() +" newSet.add(" + treeIterator.current.value +") ");
+        }
+
+        for(T x:newSet){
+            System.out.println("Value of x " + x.toString());
+        }
+
+        return newSet;
     }
 
     /**
@@ -286,8 +308,20 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        // TODO
-        throw new NotImplementedError();
+        SortedSet<T> newSet = new BinaryTree<>();
+        BinaryTreeIterator treeIterator = new BinaryTreeIterator();
+
+        while (treeIterator.hasNext()) {
+            if ( treeIterator.next().compareTo(fromElement) >= 0)
+                newSet.add(treeIterator.current.value);
+            System.out.println("To Element" + fromElement.toString() +" newSet.add(" + treeIterator.current.value +") ");
+        }
+
+        for(T x:newSet){
+            System.out.println("Value of x " + x.toString());
+        }
+
+        return newSet;
     }
 
     @Override
