@@ -215,7 +215,6 @@ public class JavaTasks {
         int maxValue = 0;
         int max = 0;
 
-
         while (sc.hasNextLine()) {
             nums.add(Integer.parseInt(sc.nextLine()));
         }

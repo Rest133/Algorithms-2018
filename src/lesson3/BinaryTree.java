@@ -12,9 +12,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
     private static class Node<T> {
         final T value;
-
         Node<T> left = null;
-
         Node<T> right = null;
 
         Node(T value) {
@@ -23,8 +21,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     }
 
     private Node<T> root = null;
-
     private int size = 0;
+    private boolean isLeftChild;
 
     @Override
     public boolean add(T t) {
@@ -36,12 +34,10 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         Node<T> newNode = new Node<>(t);
         if (closest == null) {
             root = newNode;
-        }
-        else if (comparison < 0) {
+        } else if (comparison < 0) {
             assert closest.left == null;
             closest.left = newNode;
-        }
-        else {
+        } else {
             assert closest.right == null;
             closest.right = newNode;
         }
@@ -66,8 +62,103 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      */
     @Override
     public boolean remove(Object o) {
-        // TODO
-        throw new NotImplementedError();
+        Node<T> current = root;
+        Node<T> parent = root;
+        isLeftChild = true;
+        int compare;
+
+        @SuppressWarnings("unchecked")
+        T key = (T) o;
+
+        while ((compare = current.value.compareTo(key)) != 0) {
+            parent = current;
+            if (compare > 0) {
+                isLeftChild = true;
+                current = current.left;
+            } else {
+                isLeftChild = false;
+                current = current.right;
+            }
+            if (current == null)
+                return false;
+        }
+        deleteThisNode(current, parent);
+        size--;
+        return true;
+    }
+
+    private void removeNode(Node<T> node) {
+        remove(node.value);
+    }
+
+    private void deleteThisNode(Node<T> current, Node<T> parent) {
+        if (current.left == null && current.right == null) {
+            if (current == root) {
+                root = null;
+            } else if (isLeftChild) {
+                parent.left = null;
+            } else
+                parent.right = null;
+
+        } else if (current.right == null) {
+            if (current == root) {
+                root = current.left;
+            } else if (isLeftChild) {
+                parent.left = current.left;
+            } else
+                parent.right = current.left;
+
+        } else if (current.left == null) {
+            if (current == root) {
+                root = current.right;
+            } else if (isLeftChild) {
+                parent.left = current.right;
+            } else
+                parent.right = current.right;
+
+        } else {
+            Node replacement = getSuccessor(current);
+
+            if (current == root) {
+                root = replacement;
+            } else if (isLeftChild) {
+                parent.left = replacement;
+            } else
+                parent.right = replacement;
+
+            replacement.left = current.left;
+        }
+
+    }
+
+    private Node<T> getParent(Node<T> nodeChild) {
+        Node<T> current = root;
+        while (current.left.value == nodeChild.value || current.right.value == nodeChild.value) {
+            if (nodeChild.equals(current))
+                current = current.left;
+            else current = current.right;
+            if (current == null) return null;
+        }
+        return current;
+    }
+
+    private Node<T> getSuccessor(Node<T> SuccNode) {
+        Node<T> successorParent = SuccNode;
+        Node<T> successor = SuccNode;
+        Node<T> currentNode = SuccNode.right;
+
+        while (currentNode != null) {
+            successorParent = successor;
+            successor = currentNode;
+            currentNode = currentNode.left;
+        }
+
+        if (successor != SuccNode.right) {
+            successorParent.left = successor.right;
+            successor.right = SuccNode.right;
+        }
+
+        return successor;
     }
 
     @Override
@@ -87,35 +178,48 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         int comparison = value.compareTo(start.value);
         if (comparison == 0) {
             return start;
-        }
-        else if (comparison < 0) {
+        } else if (comparison < 0) {
             if (start.left == null) return start;
             return find(start.left, value);
-        }
-        else {
+        } else {
             if (start.right == null) return start;
             return find(start.right, value);
         }
     }
 
     public class BinaryTreeIterator implements Iterator<T> {
+        private Node<T> current;
+        private Stack<Node<T>> treeStack = new Stack<>();
 
-        private Node<T> current = null;
-
-        private BinaryTreeIterator() {}
+        private BinaryTreeIterator() {
+            current = root;
+            while (current != null) {
+                treeStack.push(current);
+                current = current.left;
+            }
+        }
 
         /**
          * Поиск следующего элемента
          * Средняя
          */
         private Node<T> findNext() {
-            // TODO
-            throw new NotImplementedError();
+            Node<T> lastInStack = treeStack.pop();
+            current = lastInStack;
+            if (lastInStack.right != null) {
+                lastInStack = lastInStack.right;
+                while (lastInStack != null) {
+                    treeStack.push(lastInStack);
+                    lastInStack = lastInStack.left;
+                }
+            }
+            return current;
         }
 
         @Override
         public boolean hasNext() {
-            return findNext() != null;
+            //return findNext() != null;
+            return !treeStack.isEmpty();
         }
 
         @Override
@@ -131,8 +235,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
          */
         @Override
         public void remove() {
-            // TODO
-            throw new NotImplementedError();
+            BinaryTree.this.removeNode(current);
         }
     }
 
