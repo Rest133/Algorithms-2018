@@ -117,16 +117,15 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                 parent.right = current.right;
 
         } else {
-            Node replacement = getSuccessor(current);
-
+            Node successor = getSuccessor(current);
             if (current == root) {
-                root = replacement;
+                root = successor;
             } else if (isLeftChild) {
-                parent.left = replacement;
+                parent.left = successor;
             } else
-                parent.right = replacement;
+                parent.right = successor;
 
-            replacement.left = current.left;
+            successor.left = current.left;
         }
 
     }
@@ -260,25 +259,27 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     /**
      * Для этой задачи нет тестов (есть только заготовка subSetTest), но её тоже можно решить и их написать
      * Очень сложная
+     * Трудоемкость: О(n)?(Здесь же if-else и не могут использоваться сразу 3 цикла)
      */
     @NotNull
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) throws IllegalArgumentException, NullPointerException {
-        SortedSet<T> newSet = new BinaryTree<>();
+
+        BinaryTree<T> newSet = new BinaryTree<>();
         BinaryTreeIterator treeIterator = new BinaryTreeIterator();
+
+        if (root == null) return newSet;
 
         if (fromElement == null) {
             while (treeIterator.hasNext()) {
                 if (treeIterator.next().compareTo(toElement) < 0)
                     newSet.add(treeIterator.current.value);
-                System.out.println("To Element" + toElement.toString() + " newSet.add(" + treeIterator.current.value + ") ");
             }
         }
         if (toElement == null) {
             while (treeIterator.hasNext()) {
                 if (treeIterator.next().compareTo(fromElement) >= 0)
                     newSet.add(treeIterator.current.value);
-                System.out.println("To Element" + fromElement.toString() + " newSet.add(" + treeIterator.current.value + ") ");
             }
         } else {
             while (treeIterator.hasNext()) {
@@ -286,7 +287,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                     newSet.add(treeIterator.current.value);
             }
         }
-
         return newSet;
     }
 
