@@ -44,7 +44,8 @@ abstract class AbstractDynamicTests {
                 23, 76, 34, 93, 123, 21, 56, 87, 91, 12, 45, 98, 140, 12, 5, 38, 349, 65, 94,
                 45, 76, 15, 99, 100, 88, 84, 35, 88
         )))
-    }
+        assertEquals(listOf(2, 8, 9, 12), longestIncreasingSubSequence(listOf(2, 2, 8, 8, 5, 9, 12, 6)))//Проверка на
+    }                                                                           //СТРОГО возрастающую последовательность
 
     fun shortestPathOnField(shortestPathOnField: (String) -> Int) {
         assertEquals(1, shortestPathOnField("input/field_in2.txt"))

@@ -42,6 +42,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             closest.right = newNode;
         }
         size++;
+        System.out.println("Add" + t.toString());
         return true;
     }
 
@@ -268,8 +269,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         BinaryTree<T> newSet = new BinaryTree<>();
         BinaryTreeIterator treeIterator = new BinaryTreeIterator();
 
-        if (root == null) return newSet;
-
         if (fromElement == null) {
             while (treeIterator.hasNext()) {
                 if (treeIterator.next().compareTo(toElement) < 0)
@@ -283,7 +282,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             }
         } else {
             while (treeIterator.hasNext()) {
-                if (treeIterator.next().compareTo(fromElement) > 0 && treeIterator.next().compareTo(toElement) < 0)
+                if (treeIterator.next().compareTo(fromElement) >= 0 && treeIterator.next().compareTo(toElement) < 0)
                     newSet.add(treeIterator.current.value);
             }
         }
@@ -306,7 +305,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      */
     @NotNull
     @Override
-    public SortedSet<T> tailSet(T fromElement) {
+    public SortedSet<T> tailSet(T fromElement)throws IllegalArgumentException, NullPointerException {
         return subSet(fromElement, null);
     }
 

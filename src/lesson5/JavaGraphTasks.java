@@ -2,8 +2,7 @@ package lesson5;
 
 import kotlin.NotImplementedError;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class JavaGraphTasks {
@@ -66,8 +65,9 @@ public class JavaGraphTasks {
      * J ------------ K
      */
     public static Graph minimumSpanningTree(Graph graph) {
-        throw new NotImplementedError();
+        return graph;
     }
+
 
     /**
      * Максимальное независимое множество вершин в графе без циклов.
